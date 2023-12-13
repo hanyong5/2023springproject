@@ -3,7 +3,6 @@ package com.study.springboot.service;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.study.springboot.api.request.CreateAndEditRestaurantRequest;
@@ -19,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class RestaurantService {
 	
-	private final RestaurantRepository restaurantRepositry;
-	private final MenuRepository menuRepositroy;
+	private final RestaurantRepository restaurantRepository;
+	private final MenuRepository menuRepository;
 	
 	public RestaurantEntity createRestaurant(
 			CreateAndEditRestaurantRequest request
@@ -31,7 +30,7 @@ public class RestaurantService {
                 .createdAt(ZonedDateTime.now())
                 .updatedAt(ZonedDateTime.now())
                 .build();
-		restaurantRepositry.save(restaurant);
+		restaurantRepository.save(restaurant);
 
         request.getMenus().forEach((menu) -> {
             MenuEntity menuEntity = MenuEntity.builder()
@@ -42,14 +41,14 @@ public class RestaurantService {
                     .updatedAt(ZonedDateTime.now())
                     .build();
 
-            menuRepositroy.save(menuEntity);
+            menuRepository.save(menuEntity);
         });
 
         return restaurant;
 	}
 
 	public List<RestaurantView> getAllRestaurants() {
-		List<RestaurantEntity> restaurants =restaurantRepositry.findAll();
+		List<RestaurantEntity> restaurants =restaurantRepository.findAll();
 		
 		return restaurants.stream().map((restaurant)-> RestaurantView.builder()
 				.id(restaurant.getId())
@@ -59,6 +58,30 @@ public class RestaurantService {
 				.updatedAt(restaurant.getCreatedAt())
 				.build()).toList();
 	}
+
+	public void editRestaurant(Long restaurantId, CreateAndEditRestaurantRequest request) {
+		 RestaurantEntity restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new RuntimeException("없는 레스토랑입니다"));
+	        restaurant.changeNameAndAddress(request.getName(), request.getAddress());
+	        restaurantRepository.save(restaurant);
+
+	        List<MenuEntity> menus = menuRepository.findAllByRestaurantId(restaurantId);
+	        menuRepository.deleteAll(menus);
+
+	        request.getMenus().forEach((menu) -> {
+	            MenuEntity menuEntity = MenuEntity.builder()
+	                    .restaurantId(restaurantId)
+	                    .name(menu.getName())
+	                    .price(menu.getPrice())
+	                    .createdAt(ZonedDateTime.now())
+	                    .updatedAt(ZonedDateTime.now())
+	                    .build();
+
+	            menuRepository.save(menuEntity);
+	        });
+		
+	}
+
+
 	
 	
 	
