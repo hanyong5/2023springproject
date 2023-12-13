@@ -1,11 +1,13 @@
 package com.study.springboot.service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.study.springboot.api.request.CreateAndEditRestaurantRequest;
+import com.study.springboot.api.request.RestaurantView;
 import com.study.springboot.entity.MenuEntity;
 import com.study.springboot.entity.RestaurantEntity;
 import com.study.springboot.repository.MenuRepository;
@@ -44,6 +46,18 @@ public class RestaurantService {
         });
 
         return restaurant;
+	}
+
+	public List<RestaurantView> getAllRestaurants() {
+		List<RestaurantEntity> restaurants =restaurantRepositry.findAll();
+		
+		return restaurants.stream().map((restaurant)-> RestaurantView.builder()
+				.id(restaurant.getId())
+				.name(restaurant.getName())
+				.address(restaurant.getAddress())
+				.createdAt(restaurant.getCreatedAt())
+				.updatedAt(restaurant.getCreatedAt())
+				.build()).toList();
 	}
 	
 	
