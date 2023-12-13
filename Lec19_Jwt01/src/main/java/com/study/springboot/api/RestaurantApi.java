@@ -24,7 +24,7 @@ public class RestaurantApi {
 			summary="매장정보",
 			description="restaurant information"
 			)
-//	@Parameter(name="name",description="이름")
+//	@Parameter(name="name",description="이름q")
 	@GetMapping("/restaurants")
 	public List<RestaurantView> getRestaurants(){
 		return restaurantService.getAllRestaurants();
