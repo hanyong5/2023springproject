@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class CreateAndEditRestaurantRequest {
 	private String name;
 	private String address;
-	private List<CreateAndEditRestaurantRequestMenu> meuns;
+	private  List<CreateAndEditRestaurantRequestMenu> menus;
 }

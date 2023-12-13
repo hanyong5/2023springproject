@@ -24,23 +24,26 @@ public class RestaurantService {
 			CreateAndEditRestaurantRequest request
 			) {
 		RestaurantEntity restaurant = RestaurantEntity.builder()
-				.name(request.getName())
-				.address(request.getAddress())
-				.createdAt(ZonedDateTime.now())
-				.updatedAt(ZonedDateTime.now())
-				.build();
+                .name(request.getName())
+                .address(request.getAddress())
+                .createdAt(ZonedDateTime.now())
+                .updatedAt(ZonedDateTime.now())
+                .build();
 		restaurantRepositry.save(restaurant);
-		request.getMeuns().forEach((menu)->{
-			MenuEntity menuEntity = MenuEntity.builder()
-					.restaurantId(restaurant.getId())
-					.name(menu.getName())
-					.price(menu.getPrice())
-					.createdAt(ZonedDateTime.now())
-					.updatedAt(ZonedDateTime.now())
-					.build();
-			menuRepositroy.save(menuEntity);
-		});
-		return restaurant;
+
+        request.getMenus().forEach((menu) -> {
+            MenuEntity menuEntity = MenuEntity.builder()
+                    .restaurantId(restaurant.getId())
+                    .name(menu.getName())
+                    .price(menu.getPrice())
+                    .createdAt(ZonedDateTime.now())
+                    .updatedAt(ZonedDateTime.now())
+                    .build();
+
+            menuRepositroy.save(menuEntity);
+        });
+
+        return restaurant;
 	}
 	
 	
