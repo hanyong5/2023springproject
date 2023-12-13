@@ -11,6 +11,8 @@ import com.study.springboot.api.request.CreateAndEditRestaurantRequest;
 import com.study.springboot.api.request.RestaurantView;
 import com.study.springboot.service.RestaurantService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,14 +20,18 @@ import lombok.RequiredArgsConstructor;
 public class RestaurantApi {
 	private final RestaurantService restaurantService;
 	
-	
+	@Operation(
+			summary="매장정보",
+			description="restaurant information"
+			)
+//	@Parameter(name="name",description="이름")
 	@GetMapping("/restaurants")
 	public List<RestaurantView> getRestaurants(){
 		return restaurantService.getAllRestaurants();
 	}
 	
 	
-	
+	@Operation(summary="매장생성")
 	@PostMapping("/restaurant")
 	public void createRestaurant(
 			@RequestBody CreateAndEditRestaurantRequest request
