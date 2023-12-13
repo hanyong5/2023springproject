@@ -11,7 +11,7 @@
 
 <c:forEach var="lists" items="${lists }">
 	${lists.email } / ${lists.name }
-	<hr>
+	<hr>1
 </c:forEach>
 
 </body>
