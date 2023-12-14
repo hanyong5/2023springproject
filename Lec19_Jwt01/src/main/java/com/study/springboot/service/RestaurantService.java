@@ -5,13 +5,16 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+
 import com.study.springboot.api.request.CreateAndEditRestaurantRequest;
 import com.study.springboot.api.request.RestaurantView;
+import com.study.springboot.api.response.RestaurantDetailView;
 import com.study.springboot.entity.MenuEntity;
 import com.study.springboot.entity.RestaurantEntity;
 import com.study.springboot.repository.MenuRepository;
 import com.study.springboot.repository.RestaurantRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -78,6 +81,40 @@ public class RestaurantService {
 
 	            menuRepository.save(menuEntity);
 	        });
+		
+	}
+	
+	@Transactional
+	public void deleteRestaurant(Long restaurantId) {
+		RestaurantEntity restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
+		restaurantRepository.delete(restaurant);
+		
+		List<MenuEntity> menus = menuRepository.findAllByRestaurantId(restaurantId);
+		menuRepository.deleteAll(menus);
+	}
+
+	public RestaurantDetailView getRestaurantDetail(Long restarurantId) {
+		RestaurantEntity restaurant = restaurantRepository.findById(restarurantId).orElseThrow();
+		List<MenuEntity> menus = menuRepository.findAllByRestaurantId(restarurantId);
+		
+		return RestaurantDetailView.builder()
+				.id(restaurant.getId())
+				.name(restaurant.getName())
+				.address(restaurant.getAddress())
+				.updatedAt(restaurant.getUpdatedAt())
+				.createdAt(restaurant.getCreatedAt())
+				.menus(
+						menus.stream().map((menu) -> RestaurantDetailView.Menu.builder()
+								.id(menu.getId())
+								.name(menu.getName())
+								.price(menu.getPrice())
+								.createdAt(menu.getCreatedAt())
+								.updatedAt(menu.getUpdatedAt())
+								.build()
+								
+								).toList()
+						).build();
+				
 		
 	}
 

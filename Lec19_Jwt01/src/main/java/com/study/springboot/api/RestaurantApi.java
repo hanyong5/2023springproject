@@ -2,6 +2,7 @@ package com.study.springboot.api;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.study.springboot.api.request.CreateAndEditRestaurantRequest;
 import com.study.springboot.api.request.RestaurantView;
+import com.study.springboot.api.response.RestaurantDetailView;
 import com.study.springboot.service.RestaurantService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,6 +25,17 @@ import lombok.RequiredArgsConstructor;
 @RestController
 public class RestaurantApi {
 	private final RestaurantService restaurantService;
+	
+	@Operation(summary="매장수정")
+	@PutMapping("/restaurant/{restaurantId}")
+	public void editRestaurant(
+			@Parameter(name = "restaurantId", description = "레스토랑 ID", in = ParameterIn.PATH, schema = @Schema(type = "integer"))
+			@PathVariable Long restaurantId,
+			@RequestBody CreateAndEditRestaurantRequest request
+			)
+	{
+		restaurantService.editRestaurant(restaurantId, request);
+	}
 	
 	@Operation(
 			summary="매장정보",
@@ -44,14 +57,22 @@ public class RestaurantApi {
 		restaurantService.createRestaurant(request);
 	}
 	
-	@Operation(summary="매장수정")
-	@PutMapping("/restaurant/{restaurantId}")
-	public void editRestaurant(
+	@Operation(summary="매장삭제")
+	@DeleteMapping("/restaurant/{restaurantId}")
+	public void deletRestaurant(
 			@Parameter(name = "restaurantId", description = "레스토랑 ID", in = ParameterIn.PATH, schema = @Schema(type = "integer"))
-			@PathVariable Long restaurantId,
-			@RequestBody CreateAndEditRestaurantRequest request
-			)
-	{
-		restaurantService.editRestaurant(restaurantId, request);
+			@PathVariable Long restaurantId
+			) {
+		restaurantService.deleteRestaurant(restaurantId);
 	}
+	
+	@Operation(summary="매장/메뉴정보")
+	@GetMapping("/restaurant/{restaurantId}")
+	public RestaurantDetailView getRestaurant(
+			@PathVariable Long restarurantId
+			) {
+		return restaurantService.getRestaurantDetail(restarurantId);
+	}
+	
+	
 }
