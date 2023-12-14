@@ -14,54 +14,63 @@ import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Builder
 @Table(name="users")
 public class User implements UserDetails{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
-	@SequenceGenerator(name="users_seq", sequenceName = "users_SEQ", allocationSize=1)
-	private Long id;
-	
+	@SequenceGenerator(name="users_seq",sequenceName = "users_SEQ", allocationSize = 1)
+	private Long Id;
 	private String email;
 	private String password;
 	
+//	private String name;
+//	private String role; // 유저의 롤.
+//	private String authProvider; // example : facebook
+//	private ZonedDateTime createdAt;
+//	private ZonedDateTime updatedAt;
 	
-	@Override //권한반환
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority("user"));
-	}
-	@Override // 사용자의 id를 반환
-	public String getUsername() {
-		
-		return email;
-	}
 	@Override
-	public String getPassword() {
-		return password;
-	}
-	@Override //계정만료여부
-	public boolean isAccountNonExpired() {
-		return true; // 만료되지 않음
-	}
-	@Override //계정 잠금여부
-	public boolean isAccountNonLocked() {
-		return true; // 잠금되지 않음
-	}
-	@Override //패스워드 만료여부
-	public boolean isCredentialsNonExpired() {
-		return true; // 만료되지않음
-	}
-	@Override //계정 상용가능여부
-	public boolean isEnabled() {
-		return true; //사용가능
-	}
-	
-	
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("user"));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
