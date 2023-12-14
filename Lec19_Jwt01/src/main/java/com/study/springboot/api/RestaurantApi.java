@@ -68,11 +68,12 @@ public class RestaurantApi {
 	
 	@Operation(summary="매장/메뉴정보")
 	@GetMapping("/restaurant/{restaurantId}")
-	public RestaurantDetailView getRestaurant(
-			@PathVariable Long restarurantId
-			) {
-		return restaurantService.getRestaurantDetail(restarurantId);
-	}
+    public RestaurantDetailView getRestaurant(
+    		@Parameter(name = "restaurantId", description = "레스토랑 ID", in = ParameterIn.PATH, schema = @Schema(type = "integer"))
+            @PathVariable Long restaurantId
+    ) {
+        return restaurantService.getRestaurantDetail(restaurantId);
+    }
 	
 	
 }

@@ -93,30 +93,29 @@ public class RestaurantService {
 		menuRepository.deleteAll(menus);
 	}
 
-	public RestaurantDetailView getRestaurantDetail(Long restarurantId) {
-		RestaurantEntity restaurant = restaurantRepository.findById(restarurantId).orElseThrow();
-		List<MenuEntity> menus = menuRepository.findAllByRestaurantId(restarurantId);
-		
-		return RestaurantDetailView.builder()
-				.id(restaurant.getId())
-				.name(restaurant.getName())
-				.address(restaurant.getAddress())
-				.updatedAt(restaurant.getUpdatedAt())
-				.createdAt(restaurant.getCreatedAt())
-				.menus(
-						menus.stream().map((menu) -> RestaurantDetailView.Menu.builder()
-								.id(menu.getId())
-								.name(menu.getName())
-								.price(menu.getPrice())
-								.createdAt(menu.getCreatedAt())
-								.updatedAt(menu.getUpdatedAt())
-								.build()
-								
-								).toList()
-						).build();
-				
-		
-	}
+	@Transactional
+	public RestaurantDetailView getRestaurantDetail(Long restaurantId) {
+        RestaurantEntity restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
+        List<MenuEntity> menus = menuRepository.findAllByRestaurantId(restaurantId);
+
+        return RestaurantDetailView.builder()
+                .id(restaurant.getId())
+                .name(restaurant.getName())
+                .address(restaurant.getAddress())
+                .updatedAt(restaurant.getUpdatedAt())
+                .createdAt(restaurant.getCreatedAt())
+                .menus(
+                        menus.stream().map((menu) -> RestaurantDetailView.Menu.builder()
+                                .id(menu.getId())
+                                .name(menu.getName())
+                                .price(menu.getPrice())
+                                .createdAt(menu.getCreatedAt())
+                                .updatedAt(menu.getUpdatedAt())
+                                .build()
+                        ).toList()
+                )
+                .build();
+    }
 
 
 	
