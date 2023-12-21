@@ -2,6 +2,7 @@ package com.study.springboot.api;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,10 +28,28 @@ public class FileDataApiController {
 	
 	@PostMapping("/file")
 	@CrossOrigin
-	public ResponseEntity<?> upLoadImage(@RequestParam("image") MultipartFile file) throws IOException
+//	public ResponseEntity<?> upLoadImage(@RequestParam("image") MultipartFile file) 
+//			throws IOException
+//	{
+//		String uploadImage= fileDataService.uploadImageSystem(file);
+//		return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+//	}
+	public ResponseEntity<?> upLoadImage(@RequestParam("images") List<MultipartFile>  files) 
+			throws IOException
 	{
-		String uploadImage= fileDataService.uploadImageSystem(file);
-		return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+		List<String> uploadResult = files.stream()
+				.map(file -> {
+					try {
+						return fileDataService.uploadImageSystem(file);
+					} catch (Exception e) {
+						e.printStackTrace();
+						return "파일업로드 실패" + file.getOriginalFilename();
+					}
+				}).collect(Collectors.toList());
+		
+		return ResponseEntity.status(HttpStatus.OK).body(uploadResult);
+		
+
 	}
 	
 	@GetMapping("/file/{id}")
