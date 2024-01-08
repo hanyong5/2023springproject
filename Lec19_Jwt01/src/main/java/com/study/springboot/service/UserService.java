@@ -1,15 +1,15 @@
 package com.study.springboot.service;
 
 
-import java.time.Duration;
+import java.time.ZonedDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.study.springboot.api.request.AddUserRequest;
-import com.study.springboot.config.jwt.TokenProvider;
 import com.study.springboot.entity.User;
 import com.study.springboot.repository.UserRepository;
+import com.study.springboot.security.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,16 +18,33 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
-	private final TokenProvider tokenProvider;
+	private final JwtProvider jwtProvider;
 	
 	
-	public Long save(AddUserRequest dto) {
-		 User user = User.builder()
-		            .email(dto.getEmail())
-		            .password(bCryptPasswordEncoder.encode(dto.getPassword()))
-		            .build();
 
-		    return userRepository.save(user).getId();
+	public String join(AddUserRequest dto) {
+
+		if (dto.getPassword() == null) {
+			// Handle the case where the password is null (throw an exception, return an
+			// error message, etc.)
+			return "비밀번호를 입력하세요";
+		}
+		User user = new User();
+		user.setEmail(dto.getEmail());
+//		user.setUsername(dto.getEmail());
+		user.setCreatedAt(ZonedDateTime.now());
+		user.setUpdatedAt(ZonedDateTime.now());
+		user.setRole("user");
+
+		// Encode the password before saving it
+		String encodedPassword = bCryptPasswordEncoder.encode(dto.getPassword());
+		user.setPassword(encodedPassword);
+
+		// Save the user using the repository
+		userRepository.save(user);
+
+		// You can return a success message or perform other actions as needed
+		return "입력완료";
 	}
 
 
@@ -37,13 +54,22 @@ public class UserService {
 
 
 	public String login(AddUserRequest request) {
-		User user = userRepository.findByEmail(request.getEmail());
+		String email = request.getEmail();
+		String rawPasswordString = request.getPassword();
 		
-		if(user !=null && bCryptPasswordEncoder.matches(request.getPassword(),user.getPassword())) {
-			Duration expoirationTime = Duration.ofMinutes(30); //30분
-			String token = tokenProvider.generateToken(user,expoirationTime);
+		User byEmail = userRepository.findByEmail(request.getEmail());
+		
+
+		
+		if(bCryptPasswordEncoder.matches(rawPasswordString, byEmail.getPassword())) {
+			 String jwtToken = jwtProvider.generateJwtToken(
+	            		byEmail.getId(), byEmail.getEmail(), byEmail.getUsername(),
+	            		byEmail.getRole()
+	            		);
 			
-			return "로그인성공" + token;
+			return "로그인성공" + jwtToken;
+			
+					
 		}else {
 			return "로그인실패";
 		}

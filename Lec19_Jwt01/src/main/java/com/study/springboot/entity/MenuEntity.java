@@ -28,6 +28,11 @@ public class MenuEntity {
 	private Long restaurantId;
 	private String name;
 	private Integer price;
+	private int count;
 	private ZonedDateTime createdAt;
 	private ZonedDateTime updatedAt;
+	
+	 public void addLike() {
+	        this.count++;
+	    }
 }

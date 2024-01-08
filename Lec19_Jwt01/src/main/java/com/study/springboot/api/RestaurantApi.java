@@ -75,5 +75,15 @@ public class RestaurantApi {
         return restaurantService.getRestaurantDetail(restaurantId);
     }
 	
+	@Operation(summary="메뉴좋아요")
+	@PostMapping("/restaurant/menu/{id}/like")
+	public void menuAddLike(
+			@Parameter(name = "id", description = "메뉴id", in = ParameterIn.PATH, schema = @Schema(type = "integer"))
+			@PathVariable Long id
+			) {
+		restaurantService.menuAddLike(id);
+	}
+	
+	
 	
 }

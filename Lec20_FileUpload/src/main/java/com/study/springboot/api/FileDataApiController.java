@@ -34,22 +34,21 @@ public class FileDataApiController {
 //		String uploadImage= fileDataService.uploadImageSystem(file);
 //		return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
 //	}
-	public ResponseEntity<?> upLoadImage(@RequestParam("images") List<MultipartFile>  files) 
-			throws IOException
-	{
-		List<String> uploadResult = files.stream()
-				.map(file -> {
-					try {
-						return fileDataService.uploadImageSystem(file);
-					} catch (Exception e) {
-						e.printStackTrace();
-						return "파일업로드 실패" + file.getOriginalFilename();
-					}
-				}).collect(Collectors.toList());
-		
-		return ResponseEntity.status(HttpStatus.OK).body(uploadResult);
-		
+	public ResponseEntity<?> upLoadImage(
+	        @RequestParam("images") List<MultipartFile> files,
+	        @RequestParam("title") String title
+	) throws IOException {
+	    List<String> uploadResult = files.stream()
+	            .map(file -> {
+	                try {
+	                    return fileDataService.uploadImageSystem(file, title);
+	                } catch (Exception e) {
+	                    e.printStackTrace();
+	                    return "파일업로드 실패" + file.getOriginalFilename();
+	                }
+	            }).collect(Collectors.toList());
 
+	    return ResponseEntity.status(HttpStatus.OK).body(uploadResult);
 	}
 	
 	@GetMapping("/file/{id}")

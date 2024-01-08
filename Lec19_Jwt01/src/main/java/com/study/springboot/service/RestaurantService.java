@@ -40,6 +40,7 @@ public class RestaurantService {
                     .restaurantId(restaurant.getId())
                     .name(menu.getName())
                     .price(menu.getPrice())
+                    .count(0)
                     .createdAt(ZonedDateTime.now())
                     .updatedAt(ZonedDateTime.now())
                     .build();
@@ -115,6 +116,11 @@ public class RestaurantService {
                         ).toList()
                 )
                 .build();
+    }
+	
+	
+	public void menuAddLike(Long menuId) {
+		menuRepository.incrementLikeCount(menuId);
     }
 
 

@@ -12,23 +12,23 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder
 public class FileData {
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fileData_seq")
-	@SequenceGenerator(name="fileData_seq", sequenceName = "fileData_SEQ",  allocationSize = 1)
-	private Long id;
-	
-	private String name;
-	private String type;
-	private String filePath;
-	
-	@Builder
-	public FileData(String name, String type, String filePath) {
-		this.name = name;
-		this.type = type;
-		this.filePath = filePath;
-	}
-	
-	
-	
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fileData_seq")
+    @SequenceGenerator(name="fileData_seq", sequenceName = "fileData_SEQ",  allocationSize = 1)
+    private Long id;
+
+    private String name;
+    private String type;
+    private String filePath;
+    private String title;
+
+    @Builder
+    public FileData(String name, String type, String filePath, String title) {
+        this.name = name;
+        this.type = type;
+        this.filePath = filePath;
+        this.title = title;
+    }
 }

@@ -26,6 +26,7 @@ public class RestaurantDetailView {
 		private Long id;
 		private String name;
 		private Integer price;
+		private int count;
 		private ZonedDateTime createdAt;
 		private ZonedDateTime updatedAt;
 	}

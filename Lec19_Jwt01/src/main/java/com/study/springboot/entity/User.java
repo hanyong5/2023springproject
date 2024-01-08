@@ -1,5 +1,6 @@
 package com.study.springboot.entity;
 
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import lombok.Setter;
 @Entity
 @Builder
 @Table(name="users")
-public class User implements UserDetails{
+public class User{
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
 	@SequenceGenerator(name="users_seq",sequenceName = "users_SEQ", allocationSize = 1)
@@ -33,44 +34,11 @@ public class User implements UserDetails{
 	private String email;
 	private String password;
 	
-//	private String name;
-//	private String role; // 유저의 롤.
-//	private String authProvider; // example : facebook
-//	private ZonedDateTime createdAt;
-//	private ZonedDateTime updatedAt;
+	private String username;
+	private String role; // 유저의 롤.
+	private String authProvider; // example : facebook
+	private ZonedDateTime createdAt;
+	private ZonedDateTime updatedAt;
 	
-	@Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+	
 }

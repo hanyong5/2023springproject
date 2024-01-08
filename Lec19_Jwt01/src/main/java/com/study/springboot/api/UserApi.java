@@ -24,15 +24,17 @@ public class UserApi {
 	@Operation(summary="회원가입")
 	@PostMapping("/api/join")
 	 public String join(@RequestBody AddUserRequest request) {
-		 // 이메일 중복 체크
-	        String email = request.getEmail();
-	        if (userService.isEmailAlreadyExists(email)) {
-	            return "이메일이 중복되었습니다.";
-	        }
-
-	        // 중복된 이메일이 없으면 사용자 저장
-	        Long userId = userService.save(request);
-	        return "User created with ID: " + userId;
+//		 // 이메일 중복 체크
+//	        String email = request.getEmail();
+//	        if (userService.isEmailAlreadyExists(email)) {
+//	            return "이메일이 중복되었습니다.";
+//	        }
+//
+//	        // 중복된 이메일이 없으면 사용자 저장
+//	        String userId = userService.join(request);
+//	        return "User created with ID: " + userId;
+		
+		return userService.join(request);
    }
 	
 	@Operation(summary="로그인/토큰발행")

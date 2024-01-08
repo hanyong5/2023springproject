@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class CreateAndEditRestaurantRequestMenu {
 	private String name;
 	private Integer price;
+	private Integer count;
 }

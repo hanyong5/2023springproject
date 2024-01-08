@@ -22,13 +22,14 @@ public class FileDataService {
 	private final String FOLDER_PATH = "c:\\images\\";
 	private final FileDataRepository fileDataRepository;
 	
-	public String uploadImageSystem(MultipartFile file) throws IOException{
+	public String uploadImageSystem(MultipartFile file, String title) throws IOException{
 		String filePath = FOLDER_PATH + file.getOriginalFilename();
 		FileData fileData = fileDataRepository.save(
 				FileData.builder()
 				.name(file.getOriginalFilename())
 				.type(file.getContentType())
 				.filePath(filePath)
+				.title(title)
 				.build());
 		file.transferTo(new File(filePath));
 		if(filePath != null) {

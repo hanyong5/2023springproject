@@ -38,6 +38,7 @@ dependencies {
 	
 	//security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'com.auth0:java-jwt:4.2.0'
 	
 	//jjwt
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
